@@ -118,6 +118,6 @@ describe('toJSON', () => {
 
     const user = new User({ password: password, username: username })
     await user.save()
-    expect(user.toJSON()).toEqual({ username: username, created: expect.any(Number) })
+    expect(user.toJSON()).toEqual({ username: username, attempts: expect.any(Number), created: expect.any(Number) })
   })
 })
