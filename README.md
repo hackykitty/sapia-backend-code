@@ -17,7 +17,7 @@ cd sapia-backend-code
 yarn install
 sudo ./scripts/run_dev_dbs.sh -r #run mongodb docker image
 yarn dev
-open http://localhost:3000
+open http://localhost:3000/swagger
 ```
 
 For production environments...
@@ -28,7 +28,7 @@ yarn install --production
 sudo ./scripts/run_dev_dbs.sh -r #run mongodb docker image
 yarn build
 yarn start
-open http://localhost:3000
+open http://localhost:3000/swagger
 ```
 
 
