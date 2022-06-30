@@ -47,8 +47,8 @@ docker build -t <youruser>/sapia-backend-code:${package.json.version} .
 This will create the sapia-backend-code image and pull in the necessary dependencies.
 Be sure to swap out `${package.json.version}` with the actual version of sapia-backend-code.
 
-Once done, run the Docker image and map the port to whatever you wish onyour host. 
-In this example, we simply map port 3000 of the host to port 3000 of the Docker 
+Once done, run the Docker image and map the port to whatever you wish on your host. 
+In this example, I simply map port 3000 of the host to port 3000 of the Docker 
 (or whatever port was exposed in the Dockerfile):
 
 ```sh
@@ -66,9 +66,9 @@ http://localhost:3000/swagger
 ### Docker Cluster 
 
 You can push the sapia-backend-code docker image to your Docker hub repository (private or public) to run it on any node where docker is installed. It is downloaded automatically when you try to run it for the first time.
-A public [sapia-backend-code](https://hub.docker.com/r/yhaibo1116/sapia-backend-code) repository is created already.
+A public [sapia-backend-code](https://hub.docker.com/r/yhaibo1116/sapia-backend-code) repository is already created.
 
-To run Docker Cluster on your machine, you just need to run the following command
+To run Docker Cluster on your machine, you just need to run the following command.
 ```sh
 sudo ./scripts/run.sh
 ```
