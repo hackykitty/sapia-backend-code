@@ -15,6 +15,7 @@ describe('save', () => {
   it('should create user', async () => {
     const password = faker.internet.password()
     const username = faker.internet.userName()
+    const attempts = 3
     const before = Date.now()
 
     const user = new User({ password: password, username: username })
@@ -28,6 +29,7 @@ describe('save', () => {
 
     expect(fetched!.username).toBe(username)
     expect(fetched!.password).not.toBe(password)
+    expect(fetched!.attempts).toBe(attempts)
 
     expect(before).toBeLessThanOrEqual(fetched!.created.getTime())
     expect(fetched!.created.getTime()).toBeLessThanOrEqual(after)

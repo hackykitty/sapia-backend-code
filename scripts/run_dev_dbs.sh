@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Usage: run from project directory: ./scripts/run_dev_dbs.sh
 # Description: kill/clear/run mongo with docker for dev environment
@@ -50,5 +50,5 @@ if [ "$run" = "1" ]; then
 
   name='mongo'
   [[ $(docker ps -f "name=$name" --format '{{.Names}}') == $name ]] ||
-  docker run --rm -d -p 27017-27019:27017-27019 -v $(PWD)/../docker/mongodb:/data/db --name "$name"  mongo:latest
+  docker run --rm -d -p 27017-27019:27017-27019 -v $(pwd)/../docker/mongodb:/data/db --name "$name"  mongo:latest
 fi

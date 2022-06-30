@@ -1,7 +1,7 @@
-import jwt, {Secret, SignCallback, SignOptions} from 'jsonwebtoken'
+import jwt, { Secret, SignCallback, SignOptions } from 'jsonwebtoken'
 
 import db from '@src/utils/db'
-import {createDummy} from '@src/tests/user'
+import { createDummy } from '@src/tests/user'
 import user from '../user'
 
 beforeAll(async () => {
@@ -18,12 +18,12 @@ describe('login', () => {
       secretOrPrivateKey: Secret,
       options: SignOptions,
       callback: SignCallback) => {
-        callback(new Error('failure'), undefined)
+      callback(new Error('failure'), undefined)
     }
 
     const dummy = await createDummy()
     await expect(user.login(dummy.username, dummy.password)).rejects.toEqual({
-      error: {type: 'internal_server_error', message: 'Internal Server Error'}
+      error: { type: 'internal_server_error', message: 'Internal Server Error' }
     })
   })
 })

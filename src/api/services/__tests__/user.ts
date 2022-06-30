@@ -47,14 +47,14 @@ describe('login', () => {
 
   it('should reject with error if login does not exist', async () => {
     await expect(user.login(faker.internet.userName(), faker.internet.password())).resolves.toEqual({
-      error: { type: 'invalid_credentials', message: 'Invalid Login/Password' }
+      error: { type: 'non_existing_user', message: 'User does not exist' }
     })
   })
 
   it('should reject with error if password is wrong', async () => {
     const dummy = await createDummy()
     await expect(user.login(dummy.username, faker.internet.password())).resolves.toEqual({
-      error: { type: 'invalid_credentials', message: 'Invalid Login/Password' }
+      error: { type: 'invalid_password', message: 'Invalid Password' }
     })
   })
 })

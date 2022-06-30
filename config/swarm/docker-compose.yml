@@ -1,0 +1,70 @@
+version: "3.3"
+
+# virtual networks inside cluster, to let runing containers talk to each other
+networks:
+  nginx-reverse: # root nginx-reverse to sapia-backend-code
+  api-db: # sapia-backend-code to mongo
+
+    # declare all services: nginx-reverse (sapia-backend-code (redis, mongo), wp (mysql))
+services:
+  # root service: nginx as reverse-proxy for 1) sapia-backend-code and 2) wp
+  nginx-reverse:
+    image: nginx
+    restart: always
+    deploy:
+      placement:
+        # to run this service on a specific node
+        constraints:
+          - 'node.role == manager'
+    ports:
+      # exposed ports out of cluster
+      - 80:80
+      # - 443:443 # if you have certs
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro,delegated
+      - ./nginx-reverse/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro,delegated
+      # - ./nginx-reverse/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro,delegated # if you have certs
+      # - ./nginx-reverse/privkey.pem:/etc/nginx/certs/privkey.pem:ro,delegated # if you have certs
+    networks:
+      - nginx-reverse
+    depends_on:
+      # do not start service until dependencies are started
+      - sapia-backend-code
+
+  # 1) sapia-backend-code + mongo
+  sapia-backend-code:
+    image: yhaibo1116/sapia-backend-code:swagger # specify your repo name
+    build:
+      # to build image with docker-compose
+      context: ../../
+      dockerfile: ./Dockerfile
+    restart: always
+    # deploy: # uncomment to run multiple sapia-backend-code services
+    #   replicas: 4
+    #   resources:
+    #     limits:
+    #       cpus: "1.5"
+    #       memory: 256M
+    environment:
+      - MONGO_URL=mongodb://mongo/sapia-backend # 'mongo' is a name (hostname) of container
+    networks:
+      - nginx-reverse
+      - api-db
+    depends_on:
+      # do not start service until dependencies are started
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    deploy:
+      placement:
+        # to run this service on a specific node
+        constraints:
+          - 'node.role == manager'
+    # ports: # uncomment if you would like to connect from host
+    #   - 27017:27017
+    volumes:
+      - ../../../docker/mongodb:/data/db:delegated
+    networks:
+      - api-db

@@ -21,6 +21,8 @@ const signOptions: SignOptions = {
 }
 
 const publicKey = fs.readFileSync(config.publicKeyFile)
+const lockTime = config.lockTime
+
 const verifyOptions: VerifyOptions = {
   algorithms: ['RS256']
 }
@@ -61,13 +63,34 @@ async function login(username: string, password: string): Promise<LoginUserRespo
   try {
     const user = await User.findOne({ username })
     if (!user) {
-      return { error: { type: 'invalid_credentials', message: 'Invalid Login/Password' } }
+      return { error: { type: 'non_existing_user', message: 'User does not exist' } }
+    }
+
+    if (user.attempts === 0) {
+      return { error: { type: 'user_locked', message: 'User has been locked' } }
     }
 
     const passwordMatch = await user.comparePassword(password)
     if (!passwordMatch) {
-      return { error: { type: 'invalid_credentials', message: 'Invalid Login/Password' } }
+      if (user.attempts === 3)
+        user.attempted = new Date()
+
+      const now = new Date()
+      const diffTime = Math.abs(now.getTime() - user.attempted.getTime())
+
+      if ((diffTime > lockTime && user.attempts !== 0)) {
+        user.attempted = new Date()
+        user.attempts = 3
+      }
+
+      user.attempts--
+      await user.save()
+
+      return { error: { type: 'invalid_password', message: 'Invalid Password' } }
     }
+
+    user.attempts = 3
+    await user.save()
 
     const authToken = await createAuthToken(user._id.toString())
     return { userId: user._id.toString(), token: authToken.token, expireAt: authToken.expireAt }

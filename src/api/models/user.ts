@@ -5,9 +5,10 @@ import validator from 'validator'
 
 interface IUserDocument extends Document {
   password: string
-
   username: string
   created: Date
+  attempts: number
+  attempted: Date,
 }
 
 export interface IUser extends IUserDocument {
@@ -19,9 +20,10 @@ const isUsername = new RegExp('^[a-zA-Z0-9_\.\-]{1,}$')
 
 const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
-
-  username: { type: String, required: true, validate: [isUsername, 'do not match email regex'] },
+  username: { type: String, required: true, validate: [isUsername, 'do not match username regex'] },
   created: { type: Date, default: Date.now },
+  attempts: { type: Number, default: 3 },
+  attempted: { type: Date }
 }, { strict: true })
   .index({ username: 1 }, { unique: true, collation: { locale: 'en_US', strength: 1 }, sparse: true })
 

@@ -29,8 +29,12 @@ export function login(req: express.Request, res: express.Response): void {
   UserService.login(username, password)
     .then(resp => {
       if ((resp as any).error) {
-        if ((resp as ErrorResponse).error.type === 'invalid_credentials') {
+        if ((resp as ErrorResponse).error.type === 'non_existing_user') {
           writeJsonResponse(res, 404, resp)
+        } else if ((resp as ErrorResponse).error.type === 'invalid_password') {
+          writeJsonResponse(res, 401, resp)
+        } else if ((resp as ErrorResponse).error.type === 'user_locked') {
+          writeJsonResponse(res, 423, resp)
         } else {
           throw new Error(`unsupported ${resp}`)
         }
