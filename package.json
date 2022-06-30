@@ -1,0 +1,67 @@
+{
+  "name": "api-example",
+  "version": "1.0.0",
+  "description": "Backend API Example",
+  "main": "src/app.ts",
+  "repository": "git@github.com:losikov/api-example.git",
+  "author": "Alex Losikov",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "ENV_FILE=./config/.env.prod node -r tsconfig-paths/register ./bin/app.js",
+    "dev": "ENV_FILE=./config/.env.dev ts-node -r tsconfig-paths/register ./src/app.ts",
+    "test:unit": "ENV_FILE=./config/.env.test jest"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/dotenv-parse-variables": "^0.2.0",
+    "@types/express": "^4.17.7",
+    "@types/faker": "^5.1.0",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongodb-memory-server": "^2.3.0",
+    "@types/mongoose": "^5.7.36",
+    "@types/morgan": "^1.9.1",
+    "@types/node": "^14.0.27",
+    "@types/validator": "^13.1.0",
+    "@types/yamljs": "^0.2.31",
+    "bcrypt": "^5.0.0",
+    "connect": "^3.7.0",
+    "dotenv-extended": "^2.8.0",
+    "dotenv-parse-variables": "^0.3.1",
+    "express": "^4.17.1",
+    "express-openapi-validator": "^3.16.7",
+    "faker": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb-memory-server": "^6.7.6",
+    "mongoose": "^5.10.5",
+    "morgan": "^1.10.0",
+    "morgan-body": "^2.5.0",
+    "swagger-routes-express": "^3.2.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.9.7",
+    "validator": "^13.1.1",
+    "winston": "^3.3.3",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.9",
+    "@types/supertest": "^2.0.10",
+    "jest": "^26.4.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^8.10.2"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "downloadDir": "mongodb/binaries",
+      "platform": "linux",
+      "arch": "x64",
+      "version": "3",
+      "debug": "1",
+      "downloadMirror": "url",
+      "disablePostinstall": "1",
+      "systemBinary": "/usr/local/bin/mongod",
+      "md5Check": "1"
+    }
+  }
+}
